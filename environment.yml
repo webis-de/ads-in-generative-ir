@@ -1,0 +1,25 @@
+name: ads_in_generative_ir
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - python=3.10.*
+  - datasets=2.16.*
+  - ipykernel
+  - langdetect
+  - mamba
+  - nltk=3.8.*
+  - openai=1.6.1
+  - pandas=2.1.*
+  - pip:
+    - selenium==4.15.2
+  - poetry=1.*
+  - pytorch::pytorch=2.1.*
+  - scikit-learn=1.4.0
+  - spacy=3.7.*
+  - tensorboard=2.15.*
+  - torchmetrics=1.2.1
+  - transformers=4.36.*
+platforms:
+  - linux-64

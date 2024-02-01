@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "ads-in-generative-ir"
+version = "0.1.0"
+description = "Utilities to collect retrieval-augmented responses to queries by chatbots, insert ad messages into them and train classifiers on their detection"
+authors = ["Sebastian Schmidt <s.schmidt@uni-leipzig.de>, Ines Zelch <ines.zelch@uni-jena.de>"]
+readme = "README.md"
+packages = [{include = "ads_in_generative_ir"}]
+
+[tool.poetry.dependencies]
+langdetect = "^1.0.9"
+nltk = "^3.8.1"
+openai = "^1.6.1"
+pandas = "^2.1.1"
+python = "3.10.*"
+torch = "2.1.*"
+scikit-learn = "1.4.*"
+selenium = "4.15.2"
+spacy = "3.7.2"
+tensorboard = "2.15.*"
+tqdm = "^4.65.0"
+torchmetrics = "1.2.*"
+transformers = "4.36.*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
