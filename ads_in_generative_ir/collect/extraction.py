@@ -1,4 +1,6 @@
+import argparse
 import csv
+import os
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -178,11 +180,18 @@ class Extractor:
 
 
 class ExtractionRunner:
-    def __init__(self, service: str, category: str):
+    def __init__(self, service: str, meta_topic: str):
         self.service = service
-        self.category = category
-        self.all_queries_file = RESOURCE_PATH / f'queries/{category}_queries.txt'
-        self.new_queries_file = RESOURCE_PATH / f'queries/{category}_queries_{service}.txt'
+        self.meta_topic = meta_topic
+        self.all_queries_file = RESOURCE_PATH / f'queries/{meta_topic}_queries.txt'
+        self.new_queries_file = RESOURCE_PATH / f'queries/{meta_topic}_queries_{service}.txt'
+
+        self._create_dir()
+
+    def _create_dir(self):
+        out_dir = RESOURCE_PATH / "generated_responses"
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
 
     def update_new_queries(self, first_run=True, min_counts=2):
         # Get the list of all queries
@@ -190,7 +199,7 @@ class ExtractionRunner:
             queries = [l.replace('\n', '') for l in file.readlines()]
 
         try:
-            df = pd.read_csv(RESOURCE_PATH / f'generated_responses/{self.category}_responses.csv')
+            df = pd.read_csv(RESOURCE_PATH / f'generated_responses/{self.meta_topic}_responses.csv')
             df = df.loc[df['service'] == self.service]
 
             if first_run:
@@ -222,8 +231,8 @@ class ExtractionRunner:
         finished = False
         while not finished:
             # Collect 100 queries at a time
-            e = Extractor(out_file=f'{self.category}_responses.csv',
-                          queries_file=f'{self.category}_queries_{self.service}.txt')
+            e = Extractor(out_file=f'{self.meta_topic}_responses.csv',
+                          queries_file=f'{self.meta_topic}_queries_{self.service}.txt')
             e.queries = e.queries[:num_queries]
             e.collect_responses(service=self.service)
 
@@ -238,3 +247,30 @@ class ExtractionRunner:
                 if len(new_queries) == prev_len:
                     retries += 1
                 prev_len = len(new_queries)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        prog='Response collection',
+        description='Collect responses for a meta topic. '
+                    'Queries are taken from the corresponding file in the resources folder')
+
+    parser.add_argument("meta_topic", metavar="M", type=str,
+                        help='Name of the meta topic to collect responses for.')
+    parser.add_argument('-s', '--service', type=str, default='bing',
+                        help='Name of the conversational search engine from which to collect responses.')
+    parser.add_argument('--additional_run', action=argparse.BooleanOptionalAction,
+                        help='To obtain more than one response per query, set this flag.')
+    parser.add_argument('-c', '--counts', type=int, default=2,
+                        help='Number of responses to collect per query. Only relevant if not the first run.')
+    args = parser.parse_args()
+
+    topic = args.meta_topic
+    service = args.service
+    counts = args.counts
+    first_run = False if args.additional_run else True
+
+    num_queries = 30 if service == 'bing' else 100
+
+    er = ExtractionRunner(service=service, meta_topic=topic)
+    er.run(num_queries=30, first_run=first_run, min_counts=counts)
