@@ -50,6 +50,15 @@ python ads_in_generative_ir/classify/train.py all-mpnet-base-v2
 python ads_in_generative_ir/classify/evaluate.py all-mpnet-base-v2
 ```
 
+### LLM-Based Detection
+In addition to fine-tuning pre-trained sentence transformers, we applied a set of instruction-tuned LLMs to the task of detecting advertisements.
+The code and utilized prompts can be found in the `detect_advertisement_MODEL.py` for each model in [detect](ads_in_generative_ir/detect).
+
+One example is 
+```
+python ads_in_generative_ir/detect/detect_advertisements_gpt4.py test [OPENAI-KEY]
+```
+
 ## Setup
 A suitable conda environment can be created from the `.lock`-file as follows:
 ```
