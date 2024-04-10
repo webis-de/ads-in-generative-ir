@@ -19,7 +19,7 @@ spacy = "3.7.2"
 tensorboard = "2.15.*"
 tqdm = "^4.65.0"
 torchmetrics = "1.2.*"
-transformers = "4.36.*"
+transformers = "4.38.*"
 
 [build-system]
 requires = ["poetry-core"]
