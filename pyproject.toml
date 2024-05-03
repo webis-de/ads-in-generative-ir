@@ -17,7 +17,7 @@ scikit-learn = "1.4.*"
 selenium = "4.15.2"
 spacy = "3.7.2"
 tensorboard = "2.15.*"
-tqdm = "^4.65.0"
+tqdm = "^4.66.3"
 torchmetrics = "1.2.*"
 transformers = "4.36.*"
 
